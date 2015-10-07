@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>avalonJcrop示例</title>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.Jcrop.min.js"></script>
+    <script src="js/avalon.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.Jcrop.css"/>
+    <script>
+        var vm = avalon.define({
+            $id:"avalonJcrop",
+            image:['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg'],//图片源文件名，分辨率大小为1024*768
+            currentIndex:0,//当前选中的图片序号
+            selectImg: function (index) {
+                vm.currentIndex = index;
+                //切换图片
+
+                jcrop_api.setImage('image/'+vm.image[vm.currentIndex]);
+                //jcrop插件初始化图片，更多可参见jcrop插件的详解
+
+                vm.imageStatus.width = 200;
+                vm.imageStatus.height = 150;
+                vm.imageStatus.left = 0;
+                vm.imageStatus.top = 0;
+                //示例图片样式初始化
+
+                vm.selectStatus.x1 = 0;
+                vm.selectStatus.y1 = 0;
+                vm.selectStatus.x2 = 0;
+                vm.selectStatus.y2 = 0;
+                vm.selectStatus.w = 0;
+                vm.selectStatus.h = 0;
+                //图片状态初始化
+            },//图片切换函数，由ms-click调用
+            selectStatus:{'x1':0,'y1':0,'x2':0,'y2':0,'w':0,'h':0},//图片选中的位置及原图大小
+            imageStatus:{'width':200,'height':150,'top':0,'left':0},//示例效果的样式
+            $skipArray:['selectImg']
+        });
+
+    </script>
+</head>
+<body ms-controller="avalonJcrop">
+<div class="imageBox">
+    <ul>
+        <li ms-repeat="image" ms-click="selectImg($index)"><img ms-src="'image/'+el"/></li>
+    </ul>
+</div>
+<!--图片切换区-->
+
+<div class="container">
+    <img ms-src="'image/'+image[currentIndex]" id="target"/>
+</div>
+<!--图片截取区-->
+
+<div class="preview">
+    <div class="preview-container">
+        <img ms-src="'image/'+image[currentIndex]" ms-css-width="imageStatus.width" ms-css-height="imageStatus.height" ms-css-margin-top="imageStatus.top" ms-css-margin-left="imageStatus.left"/>
+    </div>
+</div>
+<!--图片效果示例区-->
+
+<div class="status">
+    <ul>
+        <li><span>X1:</span>{{selectStatus.x1}}</li>
+        <li><span>Y1:</span>{{selectStatus.y1}}</li>
+        <li><span>X2:</span>{{selectStatus.x2}}</li>
+        <li><span>Y2:</span>{{selectStatus.y2}}</li>
+        <li><span>W:</span>{{selectStatus.w}}</li>
+        <li><span>H:</span>{{selectStatus.h}}</li>
+    </ul>
+</div>
+<!--图片状态区-->
+
+<script>
+    var jcrop_api;//定义当前jcrop插件引用名
+
+
+    $('#target').Jcrop({
+        boxHeight:450,//截取选择区高度，图片会按照比例压缩
+        boxWidth:600,//选择区宽度
+        onChange: updatePreview,
+        onSelect: updatePreview,
+        aspectRatio: 200 / 150 //示例区长宽比
+    },function(){
+        jcrop_api = this;
+    });
+    //初始化jcrop插件
+
+    function updatePreview(c)
+    {
+        if (parseInt(c.w) > 0)
+        {
+            var rx = 200 / c.w;
+            var ry = 150 / c.h;
+
+            vm.imageStatus.width = Math.round(rx * 1024);
+            vm.imageStatus.height = Math.round(ry * 768);
+            vm.imageStatus.left = '-' + Math.round(rx * c.x);
+            vm.imageStatus.top = '-' + Math.round(ry * c.y);
+            
+            vm.selectStatus.x1 = Math.round(c.x);
+            vm.selectStatus.y1 = Math.round(c.y);
+            vm.selectStatus.x2 = Math.round(c.x2);
+            vm.selectStatus.y2 = Math.round(c.y2);
+            vm.selectStatus.w = Math.round(c.w);
+            vm.selectStatus.h = Math.round(c.h);
+        }
+    }
+    jcrop_api.setImage('image/'+vm.image[vm.currentIndex]);
+</script>
+</body>
+</html>

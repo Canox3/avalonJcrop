@@ -1,0 +1,61 @@
+.imageBox{
+
+}
+.imageBox ul li{
+	list-style-type:none;
+    float: left;
+    padding: 2px;
+    border: 1px solid #AAAAAA;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.imageBox ul li img{
+	width: 100px;
+    height: 75px;
+}
+.container{
+    position: absolute;
+    top: 140px;
+    left: 49px;
+}
+.container img{
+    width: 600px;
+    height: 450px;
+}
+.preview{
+    position: absolute;
+    top: 140px;
+    left: 700px;
+    padding: 5px;
+    border: 1px solid #AAAAAA;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	width: 200px;
+	height: 150px;
+    overflow: hidden;
+}
+.preview-container{
+    width: 200px;
+    height: 150px;
+    overflow: hidden;
+}
+.preview img{
+	width: 200px;
+	height: 150px;
+}
+.status{
+    top: 590px;
+    position: absolute;
+    font-family: microsoft yahei;
+}
+.status ul{
+	list-style-type: none;
+}
+.status ul li{
+    float: left;
+    padding-right: 50px;
+}
+.status span{
+    padding-right: 10px;
+    color: #FF0000;	
+}
